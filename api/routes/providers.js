@@ -16,39 +16,29 @@ router.get('/', async (req, res) => {
     }
 })
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', async (req, res, next) => {
     try {
         const provider = new Provider({ id: req.params.id })
         const result = await provider.get()
         res.status(200)
         res.send(JSON.stringify(result))
     } catch (error) {
-        res.status(404)
-        res.send(
-            JSON.stringify({
-                message: error.message,
-            })
-        )
+        next(error)
     }
 })
 
-router.post('/', async (req, res) => {
+router.post('/', async (req, res, next) => {
     try {
         const provider = new Provider(req.body)
         await provider.create()
         res.status(201)
         res.send(JSON.stringify(provider))
     } catch (error) {
-        res.status(400)
-        res.send(
-            JSON.stringify({
-                message: error.message,
-            })
-        )
+        next(error)
     }
 })
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', async (req, res, next) => {
     try {
         const id = req.params.id
         const body = req.body
@@ -58,12 +48,7 @@ router.put('/:id', async (req, res) => {
         res.status(204)
         res.end()
     } catch (error) {
-        res.status(400)
-        res.send(
-            JSON.stringify({
-                message: error.message,
-            })
-        )
+        next(error)
     }
 })
 
@@ -75,12 +60,7 @@ router.delete('/:id', async (req, res) => {
         res.status(204)
         res.end()
     } catch (error) {
-        res.status(404)
-        res.send(
-            JSON.stringify({
-                message: error.message,
-            })
-        )
+        next(error)
     }
 })
 

@@ -1,4 +1,7 @@
 const ProviderModel = require('../models/Provider')
+const NotFound = require('../errors/notFound')
+const InvalidField = require('../errors/invalidField')
+const DataNotProvided = require('../errors/dataNotProvided')
 
 class Provider {
     constructor({ id, company, email, category, createdAt, updatedAt }) {
@@ -38,16 +41,19 @@ class Provider {
 
             return result
         } catch (error) {
-            throw new Error('Fornecedor não encontrado.')
+            throw new NotFound()
         }
     }
 
     async update() {
-        await ProviderModel.findOne({
+        const providerExist = await ProviderModel.findOne({
             where: {
                 id: this.id,
             },
         })
+
+        if (providerExist === null) throw new NotFound()
+
         const fields = ['company', 'email', 'category']
         const dataToUpdate = {}
 
@@ -59,7 +65,7 @@ class Provider {
         })
 
         if (Object.keys(dataToUpdate).length === 0) {
-            throw new Error('Não foram fornecidos dados para atualizar.')
+            throw new DataNotProvided()
         }
 
         console.log(dataToUpdate)
@@ -94,7 +100,7 @@ class Provider {
             const value = this[field]
 
             if (typeof value !== 'string' || value.length === 0) {
-                throw new Error(`O campo ${field} está inválido.`)
+                throw new InvalidField(field)
             }
         })
     }
