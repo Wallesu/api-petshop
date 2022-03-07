@@ -14,8 +14,8 @@ app.use('/api/fornecedores', router)
 app.use((error, req, res, next) => {
     let status = 500
     if (error instanceof NotFound) status = 404
-    if (error instanceof InvalidField) status = 400
-    if (error instanceof DataNotProvided) status = 400
+    if (error instanceof InvalidField || error instanceof DataNotProvided)
+        status = 400
 
     res.status(status)
     res.send(

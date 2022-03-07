@@ -89,7 +89,7 @@ class Provider {
 
             return result
         } catch (error) {
-            throw new Error('Falha ao deletar fornecedor.')
+            throw new NotFound()
         }
     }
 
