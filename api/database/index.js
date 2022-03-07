@@ -10,3 +10,5 @@ const instance = new Sequelize(
     dialect: config.get("mysql.dialect"),
   }
 );
+
+module.exports = instance;

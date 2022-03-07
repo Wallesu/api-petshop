@@ -1,8 +1,8 @@
 {
   "mysql": {
-    "database": "petshop",
+    "database": "apiPetshop",
     "user": "root",
-    "password": "123456",
+    "password": "root",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
