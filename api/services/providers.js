@@ -32,6 +32,7 @@ class Provider {
                 where: {
                     id: this.id,
                 },
+                raw: true,
             })
             ;(this.company = result.company),
                 (this.email = result.email),

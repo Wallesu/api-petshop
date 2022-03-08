@@ -6,16 +6,16 @@ const InvalidField = require('./errors/invalidField')
 const DataNotProvided = require('./errors/dataNotProvided')
 const UnsupportedValue = require('./errors/unsupportedValue')
 const acceptedFormats = require('./Serializer').AcceptedFormats
-const Serializer = require('./Serializer')
+const SerializerErro = require('./Serializer').SerializerErro
 
 const app = express()
 app.use(bodyParser.json())
 
 app.use((req, res, next) => {
     let requestFormat = req.header('Accept')
-    if(requestFormat === '*/*') requestFormat = 'application/json'
-    
-    if(!acceptedFormats.includes(requestFormat)){
+    if (requestFormat === '*/*') requestFormat = 'application/json'
+
+    if (!acceptedFormats.includes(requestFormat)) {
         res.status(406)
         res.end()
         return
@@ -27,19 +27,18 @@ app.use((req, res, next) => {
 const router = require('./routes/providers')
 app.use('/api/fornecedores', router)
 
-
-
 app.use((error, req, res, next) => {
     let status = 500
     if (error instanceof NotFound) status = 404
     if (error instanceof InvalidField || error instanceof DataNotProvided)
         status = 400
 
-    if(error instanceof UnsupportedValue) status = 406
+    if (error instanceof UnsupportedValue) status = 406
 
     res.status(status)
+    const serializer = new SerializerErro(res.getHeader('Content-type'))
     res.send(
-        JSON.stringify({
+        serializer.serialize({
             message: error.message,
             idError: error.id,
         })
