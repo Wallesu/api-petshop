@@ -73,4 +73,19 @@ router.delete('/:id', async (req, res, next) => {
     }
 })
 
+const routerProducts = require('./products')
+
+const verifyProvider = async (req, res, next) => {
+    try {
+        const provider = new Provider({ id: req.params.provider_id })
+        await provider.get()
+        req.provider = provider
+        next()
+    } catch (error) {
+        next(error)
+    }
+}
+
+router.use('/:provider_id/produtos', verifyProvider, routerProducts)
+
 module.exports = router

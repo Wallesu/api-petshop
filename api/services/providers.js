@@ -45,7 +45,6 @@ class Provider {
             throw new NotFound()
         }
     }
-
     async update() {
         const providerExist = await ProviderModel.findOne({
             where: {
@@ -79,7 +78,6 @@ class Provider {
 
         return result
     }
-
     async delete() {
         try {
             const result = ProviderModel.destroy({

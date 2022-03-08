@@ -1,6 +1,9 @@
-const tableModels = require("../models/Provider");
+const models = [require('../models/Provider'), require('../models/Products')]
 
-tableModels
-  .sync()
-  .then(() => console.log("Tabela criada com sucesso!"))
-  .catch(console.log());
+async function createTables() {
+    for (let i = 0; i < models.length; i++) {
+        await models[i].sync()
+    }
+}
+
+createTables()

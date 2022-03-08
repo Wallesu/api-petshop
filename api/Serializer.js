@@ -74,9 +74,20 @@ class SerializerErro extends Serializer {
     }
 }
 
+class SerializerProduct extends Serializer {
+    constructor(contentType, extraFields) {
+        super()
+        this.contentType = contentType
+        this.publicFields = ['id', 'title'].concat(extraFields || [])
+        this.tagSingular = 'product'
+        this.tagPlural = 'products'
+    }
+}
+
 module.exports = {
     Serializer: Serializer,
     SerializerProvider: SerializerProvider,
     SerializerErro: SerializerErro,
+    SerializerProduct: SerializerProduct,
     AcceptedFormats: ['application/json', 'application/xml'],
 }
