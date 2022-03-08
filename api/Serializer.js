@@ -8,7 +8,12 @@ class Serializer {
         if (this.contentType === 'application/json') {
             return this.json(data)
         } else {
-            throw new UnsupportedValue()
+            throw new UnsupportedValue(this.contentType)
         }
     }
+}
+
+module.exports = {
+    Serializer: Serializer,
+    AcceptedFormats: ['application/json']
 }
