@@ -1,4 +1,5 @@
 const ProductModel = require('../models/Products')
+const instance = require('../database')
 
 class Product {
     constructor({
@@ -53,6 +54,32 @@ class Product {
         this.updatedAt = result.updatedAt
     }
 
+    async update() {
+        const dataToUpdate = {}
+
+        if(typeof this.title === 'string' && this.title.length > 0){
+            dataToUpdate.title = this.title
+        }
+
+        if(typeof this.price === 'number' && this.price > 0){
+            dataToUpdate.price = this.price
+        }
+
+        if(typeof this.stock === 'number' && this.stock >= 0){
+            dataToUpdate.stock = this.stock
+        }
+
+        if(Object.keys(dataToUpdate).length === 0){
+            throw new Error('Não foram fornecidos dados para atualizar.')
+        }
+        return ProductModel.update(dataToUpdate, {
+            where: {
+                id: this.id,
+                provider_id: this.provider_id
+            }
+        })
+    }
+
     async delete() {
         return await ProductModel.destroy({
             where: {
@@ -62,12 +89,30 @@ class Product {
         })
     }
 
+    decreaseStock(){
+        return instance.transaction(async transaction =>{
+            const product = await ProductModel.findOne({
+                where: {
+                    id: this.id,
+                    provider_id: this.provider_id
+                }
+            })
+
+            product['stock'] = this.stock
+            await product.save()
+            return product
+        })
+    }
+
     validate() {
         if (typeof this.title !== 'string' || this.title.length === 0) {
-            throw new Error('O campo titulo está inválido')
+            throw new Error('O campo titulo está inválido.')
         }
         if (typeof this.price !== 'number' || this.price <= 0) {
-            throw new Error('O campo preco está inválido')
+            throw new Error('O campo preco está inválido.')
+        }
+        if (typeof this.stock !== 'number' || this.stock < 0){
+            throw new Error('O campo estoque está inválido.')
         }
     }
 }
