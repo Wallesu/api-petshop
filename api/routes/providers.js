@@ -3,6 +3,13 @@ const ProviderTable = require('../models/Provider')
 const Provider = require('../services/providers')
 const SerializerProvider = require('../Serializer').SerializerProvider
 
+router.options('/', (req, res) => {
+    res.set('Access-Control-Allow-Methods', 'GET, POST')
+    res.set('Access-Control-Allow-Headers', 'Content-Type')
+    res.status(204)
+    res.end()
+})
+
 router.get('/', async (req, res) => {
     try {
         const result = await ProviderTable.findAll({
@@ -18,6 +25,13 @@ router.get('/', async (req, res) => {
             })
         )
     }
+})
+
+router.options('/:id', (req, res) => {
+    res.set('Access-Control-Allow-Methods', 'GET, PUT, DELETE')
+    res.set('Access-Control-Allow-Headers', 'Content-Type')
+    res.status(204)
+    res.end()
 })
 
 router.get('/:id', async (req, res, next) => {

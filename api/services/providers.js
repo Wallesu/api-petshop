@@ -42,7 +42,7 @@ class Provider {
 
             return result
         } catch (error) {
-            throw new NotFound()
+            throw new NotFound('Fornecedor')
         }
     }
     async update() {
@@ -52,7 +52,7 @@ class Provider {
             },
         })
 
-        if (providerExist === null) throw new NotFound()
+        if (providerExist === null) throw new NotFound('Fornecedor')
 
         const fields = ['company', 'email', 'category']
         const dataToUpdate = {}
@@ -88,7 +88,7 @@ class Provider {
 
             return result
         } catch (error) {
-            throw new NotFound()
+            throw new NotFound('Fornecedor')
         }
     }
 

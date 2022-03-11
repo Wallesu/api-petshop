@@ -1,5 +1,8 @@
 const ProductModel = require('../models/Products')
 const instance = require('../database')
+const dataNotProvided = require('../errors/dataNotProvided')
+const notFound = require('../errors/notFound')
+const invalidField = require('../errors/invalidField')
 
 class Product {
     constructor({
@@ -44,7 +47,7 @@ class Product {
         })
 
         if (!result) {
-            throw new Error('Produto não foi encontrado.')
+            throw new notFound('Produto')
         }
 
         this.title = result.title
@@ -70,7 +73,7 @@ class Product {
         }
 
         if(Object.keys(dataToUpdate).length === 0){
-            throw new Error('Não foram fornecidos dados para atualizar.')
+            throw new dataNotProvided()
         }
         return ProductModel.update(dataToUpdate, {
             where: {
@@ -106,13 +109,13 @@ class Product {
 
     validate() {
         if (typeof this.title !== 'string' || this.title.length === 0) {
-            throw new Error('O campo titulo está inválido.')
+            throw new invalidField('title')
         }
         if (typeof this.price !== 'number' || this.price <= 0) {
-            throw new Error('O campo preco está inválido.')
+            throw new invalidField('price.')
         }
         if (typeof this.stock !== 'number' || this.stock < 0){
-            throw new Error('O campo estoque está inválido.')
+            throw new invalidField('stock')
         }
     }
 }
